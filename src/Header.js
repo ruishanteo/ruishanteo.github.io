@@ -68,7 +68,7 @@ export function Header() {
           >
             <Button
               component="a"
-              href="/home"
+              href="/projects"
               sx={{
                 display: { xs: "none", md: "flex" },
                 fontFamily: "Didot",
@@ -106,7 +106,7 @@ export function Header() {
           >
             <Button
               component="a"
-              href="/home"
+              href="/projects"
               sx={{
                 display: { xs: "flex", md: "none" },
                 fontFamily: "Didot",

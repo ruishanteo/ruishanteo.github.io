@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { Header } from "./Header.js";
 import { Home } from "./Home.js";
+import { Projects } from "./Projects.js";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -34,6 +35,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
+              <Route path="/projects" element={<Projects />} />
             </Routes>
           </ThemeProvider>
         </div>
