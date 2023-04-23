@@ -53,7 +53,6 @@ export function Header() {
               fontSize: 35,
               color: "inherit",
               textDecoration: "none",
-              marginLeft: 23,
             }}
           >
             rui shan
