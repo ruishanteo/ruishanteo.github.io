@@ -9,7 +9,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 function App() {
   let theme = createTheme({
     typography: {
-      fontFamily: ["Didot", "Roboto"].join(","),
+      fontFamily: ["Roboto", "Didot"].join(","),
     },
     status: {
       danger: "#ebaaa7",
