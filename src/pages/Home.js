@@ -1,6 +1,6 @@
 import { Box, Typography, styled } from "@mui/material";
 
-import photo from "./pic.png";
+import photo from "../assets/pic.png";
 
 const Root = styled("div")(({ theme }) => ({
   padding: theme.spacing(1),
