@@ -1,3 +1,4 @@
+import Typewriter from "typewriter-effect";
 import { Box, Typography, styled } from "@mui/material";
 
 import photo from "../assets/pic.png";
@@ -11,24 +12,22 @@ const Root = styled("div")(({ theme }) => ({
 
 export function Home() {
   return (
-    <Box marginTop={5} align="center" variant="text">
+    <Box align="center" variant="text">
       <img src={photo} alt={"me"} width={"400px"} />
-      <Box mt={5} maxWidth="1000px">
+      <Box maxWidth="100vw">
         <Root>
           <Typography
-            variant="h5"
+            variant="h4"
             sx={{
               fontFamily: "Roboto",
+              letterSpacing: 5,
             }}
           >
-            Hello, I'm Rui Shan! Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-            cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum.
+            <Typewriter
+              onInit={(typewriter) => {
+                typewriter.typeString("hello there!").start();
+              }}
+            />
           </Typography>
         </Root>
       </Box>
