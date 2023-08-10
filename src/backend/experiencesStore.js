@@ -38,15 +38,18 @@ const experiencesSlice = createSlice({
 
 export async function fetchExperiences(dispatch, getState) {
   const response = await getDocs(collection(db, "experiences"));
-  const experiences = response.docs.map((doc) => {
-    const data = doc.data();
-    return {
-      ...data,
-      id: doc.id,
-      startDate: convertTime(data.startDate.toDate()),
-      endDate: convertTime(data.endDate.toDate()),
-    };
-  });
+  const experiences = response.docs
+    .map((doc) => ({ ...doc.data(), id: doc.id }))
+    .sort((a, b) => {
+      return b.startDate - a.startDate;
+    })
+    .map((data) => {
+      return {
+        ...data,
+        startDate: convertTime(data.startDate.toDate()),
+        endDate: convertTime(data.endDate.toDate()),
+      };
+    });
   dispatch(experiencesSlice.actions.saveExperiencesToStore(experiences));
 }
 
