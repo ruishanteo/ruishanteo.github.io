@@ -1,63 +1,57 @@
 import React from "react";
 
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export function Header() {
   return (
     <AppBar
       position="static"
       sx={{
-        backgroundColor: "#576b86",
+        backgroundColor: "primary.main",
+        color: "inherit",
       }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/home"
+            variant="h3"
             sx={{
               justifyContent: "center",
               display: { xs: "none", md: "flex" },
               flexGrow: 1,
-              fontFamily: "Didot",
-              fontWeight: 750,
-              fontSize: 45,
-              color: "inherit",
               textDecoration: "none",
-              marginLeft: 33,
+              marginLeft: 22,
+              fontFamily: "Roboto",
+              color: "inherit",
             }}
           >
-            rui shan
+            <Link
+              to="/home"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              rui shan
+            </Link>
           </Typography>
 
           <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/home"
+            variant="h4"
             sx={{
               justifyContent: "center",
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: "Didot",
-              fontWeight: 750,
-              fontSize: 35,
-              color: "inherit",
               textDecoration: "none",
+              fontFamily: "Roboto",
+              color: "inherit",
             }}
           >
-            rui shan
+            <Link
+              to="/home"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              rui shan
+            </Link>
           </Typography>
-
           <Box
             sx={{
               flexGrow: -10,
@@ -65,35 +59,36 @@ export function Header() {
               flexDirection: "row",
             }}
           >
-            <Button
-              component="a"
-              href="/projects"
-              sx={{
-                display: { xs: "none", md: "flex" },
-                fontFamily: "Didot",
-                fontSize: 25,
-                fontWeight: 650,
-                color: "white",
-                textTransform: "none",
-              }}
+            <Link
+              to="/projects"
+              style={{ textDecoration: "none", color: "inherit" }}
             >
-              projects
-            </Button>
+              <Typography
+                sx={{
+                  display: { xs: "none", md: "flex" },
+                  fontFamily: "Roboto",
+                }}
+                variant="h6"
+              >
+                projects
+              </Typography>
+            </Link>
 
-            <Button
-              component="a"
-              href="/home"
-              sx={{
-                display: { xs: "none", md: "flex" },
-                fontFamily: "Didot",
-                fontSize: 25,
-                fontWeight: 650,
-                color: "white",
-                textTransform: "none",
-              }}
+            <Link
+              to="/about"
+              style={{ textDecoration: "none", color: "inherit" }}
             >
-              about me
-            </Button>
+              <Typography
+                sx={{
+                  display: { xs: "none", md: "flex" },
+                  fontFamily: "Roboto",
+                  ml: 5,
+                }}
+                variant="h6"
+              >
+                about
+              </Typography>
+            </Link>
           </Box>
 
           <Box
@@ -103,35 +98,36 @@ export function Header() {
               flexDirection: "row",
             }}
           >
-            <Button
-              component="a"
-              href="/projects"
-              sx={{
-                display: { xs: "flex", md: "none" },
-                fontFamily: "Didot",
-                fontSize: 18,
-                fontWeight: 650,
-                color: "white",
-                textTransform: "none",
-              }}
+            <Link
+              to="/projects"
+              style={{ textDecoration: "none", color: "inherit" }}
             >
-              projects
-            </Button>
+              <Typography
+                sx={{
+                  display: { xs: "flex", md: "none" },
+                  fontFamily: "Roboto",
+                }}
+                variant="h6"
+              >
+                projects
+              </Typography>
+            </Link>
 
-            <Button
-              component="a"
-              href="/home"
-              sx={{
-                display: { xs: "flex", md: "none" },
-                fontFamily: "Didot",
-                fontSize: 18,
-                fontWeight: 650,
-                color: "white",
-                textTransform: "none",
-              }}
+            <Link
+              to="/about"
+              style={{ textDecoration: "none", color: "inherit" }}
             >
-              about me
-            </Button>
+              <Typography
+                sx={{
+                  display: { xs: "flex", md: "none" },
+                  fontFamily: "Roboto",
+                  ml: 5,
+                }}
+                variant="h6"
+              >
+                about
+              </Typography>
+            </Link>
           </Box>
         </Toolbar>
       </Container>
