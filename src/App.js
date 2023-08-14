@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import { Provider as ReduxProvider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 
@@ -111,6 +111,8 @@ function App() {
       h6: { fontFamily: "Roboto" },
       h5: { fontFamily: "Roboto" },
       h4: { fontFamily: "Roboto" },
+      body2: { fontFamily: "Roboto" },
+      body1: { fontFamily: "Roboto" },
       fontFamily: ["Arial"].join(","),
     },
     palette: isDarkTheme
