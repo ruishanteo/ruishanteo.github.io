@@ -65,14 +65,14 @@ export function ProjectCard({ project, techStack }) {
         <Card
           sx={{
             borderRadius: 3,
-            width: { xs: 300, md: 400 },
-            height: 500,
+            width: { xs: 400, md: "80vh" },
           }}
         >
           <CardMedia
             component="img"
             alt="project1"
-            height={250}
+            width={500}
+            height={(500 / 4) * 3}
             image={project.thumbnailImg}
           />
           <CardContent>

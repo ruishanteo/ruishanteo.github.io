@@ -6,7 +6,7 @@ import { fetchProjects } from "../backend/projectsStore";
 import { fetchTechStack } from "../backend/techStackStore";
 import { LoadingIcon } from "../components/LoadingIcon";
 
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 import { StarBorderOutlined } from "@mui/icons-material/";
 
@@ -42,15 +42,17 @@ export function Projects() {
         </Box>
       ) : (
         <Box>
-          <Grid container justifyContent="center" spacing={3} sx={{ mb: 10 }}>
+          <Stack justifyContent="center" spacing={3} sx={{ mb: 10 }}>
             {projects.map((project) => {
               return (
-                <Grid item key={project.id}>
-                  <ProjectCard project={project} techStack={techStack} />
-                </Grid>
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  techStack={techStack}
+                />
               );
             })}
-          </Grid>
+          </Stack>
           <StarBorderOutlined />
         </Box>
       )}
