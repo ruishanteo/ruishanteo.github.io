@@ -127,11 +127,8 @@ export function ProjectCard({ project, techStack }) {
           </Box>
         </DialogTitle>
 
-        <Box align="center">
-          <img width="90%" src={project.fullSizedImg} alt="fullSized img" />
-        </Box>
-
         <DialogContent>
+          <img width="100%" src={project.fullSizedImg} alt="fullSized img" />
           <DialogContentText variant="h6" sx={{ mt: 3, fontWeight: "bold" }}>
             Description
           </DialogContentText>
