@@ -52,58 +52,51 @@ export function ProjectCard({ project, techStack }) {
 
   return (
     <Box>
-      <Button
+      <Card
         onClick={handleClickOpen}
         sx={{
           "&:hover": {
-            backgroundColor: "primary.dark",
+            boxShadow: 10,
           },
           borderRadius: 3,
-          padding: 2,
+          width: { xs: 400, md: "80vh" },
         }}
       >
-        <Card
-          sx={{
-            borderRadius: 3,
-            width: { xs: 400, md: "80vh" },
-          }}
-        >
-          <CardMedia
-            component="img"
-            alt="project1"
-            width={500}
-            height={(500 / 4) * 3}
-            image={project.thumbnailImg}
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {project.title}
-            </Typography>
+        <CardMedia
+          component="img"
+          alt="project1"
+          width={500}
+          height={(500 / 4) * 3}
+          image={project.thumbnailImg}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {project.title}
+          </Typography>
 
-            <Box
-              sx={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: "2",
-                WebkitBoxOrient: "vertical",
-                mb: 3,
-              }}
+          <Box
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: "2",
+              WebkitBoxOrient: "vertical",
+              mb: 3,
+            }}
+          >
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{ wordBreak: "break-word", textTransform: "none" }}
             >
-              <Typography
-                variant="body1"
-                color="text.secondary"
-                sx={{ wordBreak: "break-word", textTransform: "none" }}
-              >
-                {project.description}
-              </Typography>
-            </Box>
-            <Grid container>
-              {project.techStack.map((tech) => renderTech(tech, techStack))}
-            </Grid>
-          </CardContent>
-        </Card>
-      </Button>
+              {project.description}
+            </Typography>
+          </Box>
+          <Grid container>
+            {project.techStack.map((tech) => renderTech(tech, techStack))}
+          </Grid>
+        </CardContent>
+      </Card>
 
       <Dialog
         fullScreen={fullScreen}
