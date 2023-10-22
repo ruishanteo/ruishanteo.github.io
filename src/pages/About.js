@@ -56,7 +56,7 @@ export function About() {
           <img src={photo} alt={"profile"} width={300} />
         </Grid>
 
-        <Grid item>
+        <Grid item xs={6}>
           <Grid item>
             <Box align="left" sx={{ ml: 3 }}>
               <Typography sx={{ ml: 1 }} variant="h5">
