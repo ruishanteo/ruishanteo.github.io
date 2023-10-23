@@ -104,20 +104,19 @@ export function ProjectCard({ project, techStack }) {
         onClose={handleClose}
         fullWidth
       >
-        <DialogTitle>
-          <Box
-            sx={{
-              backgroundColor: "secondary.dark",
-              height: "5vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              {project.title}
-            </Typography>
-          </Box>
+        <DialogTitle
+          sx={{
+            backgroundColor: "secondary.dark",
+            display: "flex",
+            padding: 2,
+            marginBottom: 2,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+            {project.title.toUpperCase()}
+          </Typography>
         </DialogTitle>
 
         <DialogContent>
