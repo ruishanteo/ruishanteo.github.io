@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
+import { Box, Button, Typography, styled } from "@mui/material";
+import { ArrowRight } from "@mui/icons-material";
 import Typewriter from "typewriter-effect";
-import { Box, Typography, styled } from "@mui/material";
 
 import photo from "../assets/pic.png";
 
@@ -11,6 +13,7 @@ const Root = styled("div")(({ theme }) => ({
 }));
 
 export function Home() {
+  const navigate = useNavigate();
   return (
     <Box align="center" variant="text">
       <img src={photo} alt={"me"} width={"400px"} />
@@ -31,6 +34,14 @@ export function Home() {
           </Typography>
         </Root>
       </Box>
+      <Button
+        variant="contained"
+        endIcon={<ArrowRight />}
+        style={{ borderRadius: 10, marginTop: 10 }}
+        onClick={() => navigate("/projects")}
+      >
+        See more
+      </Button>
     </Box>
   );
 }
