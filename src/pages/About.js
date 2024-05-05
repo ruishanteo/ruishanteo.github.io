@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-
-import { fetchExperiences } from "../backend/experiencesStore";
-
-import photo from "../assets/pic.png";
-import { LoadingIcon } from "../components/LoadingIcon";
-
-import { Box, Button, Grid, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 
 import {
   Timeline,
@@ -19,34 +18,35 @@ import {
 } from "@mui/lab";
 
 import { Email, GitHub, StarBorderOutlined } from "@mui/icons-material";
-import { fetchTechStack } from "../backend/techStackStore";
+
+import { useExperiences } from "../backend/experiencesStore";
+import { useTechStack } from "../backend/techStackStore";
+
+import photo from "../assets/pic.png";
+import { LoadingIcon } from "../components/LoadingIcon";
 import { ExperienceCard } from "../components/ExperienceCard";
+import { Lamp } from "../utils/Lamp";
 
 export function About() {
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
+  const theme = useTheme();
+  const { status: experienceStatus, data: experiences } = useExperiences();
+  const { status: techStackStatus, data: techStack } = useTechStack();
 
-  const experiences = useSelector((state) => state.experiences.experiences);
-  const allTechStack = useSelector((state) => state.techStack.techStack);
-  const techStack = allTechStack.filter((tech) => tech.isInProfile);
-
-  const onUpdate = useCallback(async () => {
-    setLoading(true);
-    await dispatch(fetchExperiences);
-    await dispatch(fetchTechStack);
-    setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    onUpdate();
-  }, [onUpdate]);
+  const loading =
+    experienceStatus === "pending" || techStackStatus === "pending";
 
   return (
     <Box mt={3} mb={5} align="center">
-      <Typography sx={{ mb: 3 }} variant="h4">
-        about me
-      </Typography>
-
+      {theme.palette.mode === "dark" ? (
+        <Lamp
+          background={theme.palette.background}
+          light={theme.palette.primary.dark}
+        />
+      ) : (
+        <Typography sx={{ mb: 3 }} variant="h4">
+          about me
+        </Typography>
+      )}
       <Grid
         container
         direction={{ xs: "column", sm: "row-reverse" }}
@@ -65,7 +65,7 @@ export function About() {
               <Box
                 sx={{
                   mb: 3,
-                  height: 5,
+                  height: 3,
                   width: 180,
                   backgroundColor: "primary.dark",
                 }}
@@ -126,7 +126,7 @@ export function About() {
               <Box
                 sx={{
                   mb: 3,
-                  height: 5,
+                  height: 3,
                   width: 180,
                   backgroundColor: "primary.dark",
                 }}
@@ -138,7 +138,16 @@ export function About() {
                   <Typography align="center">No tech stack yet!</Typography>
                 </Box>
               ) : (
-                <Grid container spacing={1} sx={{ alignItems: "center" }}>
+                <Grid
+                  container
+                  spacing={1}
+                  sx={{
+                    alignItems: "center",
+                    padding: 2,
+                    borderRadius: "34% 25% 30% 13% / 34% 24% 54% 90%",
+                    backgroundColor: "secondary.main",
+                  }}
+                >
                   {techStack.map((tech) => {
                     return (
                       <Grid item key={tech.id}>
@@ -161,7 +170,7 @@ export function About() {
               <Box
                 sx={{
                   mb: 3,
-                  height: 5,
+                  height: 3,
                   width: 180,
                   backgroundColor: "primary.dark",
                 }}
@@ -213,6 +222,7 @@ export function About() {
           </Grid>
         </Grid>
       </Grid>
+      <StarBorderOutlined />
     </Box>
   );
 }
