@@ -1,32 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+"use client";
+import React from "react";
+import { Box, Typography } from "@mui/material";
+
+import { useProjects } from "../backend/projectsStore";
+import { useTechStack } from "../backend/techStackStore";
 
 import { ProjectCard } from "../components/ProjectCard";
-import { fetchProjects } from "../backend/projectsStore";
-import { fetchTechStack } from "../backend/techStackStore";
 import { LoadingIcon } from "../components/LoadingIcon";
 
-import { Box, Stack, Typography } from "@mui/material";
-
-import { StarBorderOutlined } from "@mui/icons-material/";
-
 export function Projects() {
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
+  const { status: projectStatus, data: projects } = useProjects();
+  const { status: techStackStatus, data: techStack } = useTechStack();
 
-  const projects = useSelector((state) => state.projects.projects);
-  const techStack = useSelector((state) => state.techStack.techStack);
-
-  const onUpdate = useCallback(async () => {
-    setLoading(true);
-    await dispatch(fetchProjects);
-    await dispatch(fetchTechStack);
-    setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    onUpdate();
-  }, [onUpdate]);
+  const loading = projectStatus === "pending" || techStackStatus === "pending";
 
   return (
     <Box mt={3} mb={5} align="center">
@@ -41,20 +27,18 @@ export function Projects() {
           <Typography>No projects found!</Typography>
         </Box>
       ) : (
-        <Box>
-          <Stack justifyContent="center" spacing={3} sx={{ mb: 10 }}>
-            {projects.map((project) => {
-              return (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  techStack={techStack}
-                />
-              );
-            })}
-          </Stack>
-          <StarBorderOutlined />
-        </Box>
+        <>
+          {projects.map((project, index) => {
+            return (
+              <ProjectCard
+                key={project.id}
+                offset={index}
+                project={project}
+                techStack={techStack}
+              />
+            );
+          })}
+        </>
       )}
     </Box>
   );

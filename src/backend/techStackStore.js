@@ -1,29 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs } from "firebase/firestore";
 
 import { db } from "./Firebase";
 
-const techStackSlice = createSlice({
-  name: "techstack",
-  initialState: {
-    techStack: [],
-  },
-  reducers: {
-    saveTechStackToStore: (state, action) => {
-      state.techStack = action.payload;
-    },
-  },
-});
-
-export async function fetchTechStack(dispatch, getState) {
+const getTechStack = async () => {
   const response = await getDocs(collection(db, "techStack"));
-  const techStack = response.docs
+  return response.docs
     .map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }))
     .sort((a, b) => a.name > b.name);
-  dispatch(techStackSlice.actions.saveTechStackToStore(techStack));
-}
+};
 
-export const techStackReducer = techStackSlice.reducer;
+export const useTechStack = () => {
+  return useQuery({
+    queryKey: ["techstack"],
+    queryFn: getTechStack,
+  });
+};

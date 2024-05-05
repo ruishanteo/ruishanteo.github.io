@@ -1,44 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs } from "firebase/firestore";
 
-import { db } from "./Firebase";
+import { convertTime, db } from "./Firebase";
 
-function convertTime(date) {
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  const day = date.getDate();
-  return `${day} ${month} ${year}`;
-}
-
-const projectsSlice = createSlice({
-  name: "projects",
-  initialState: {
-    projects: [],
-  },
-  reducers: {
-    saveProjectsToStore: (state, action) => {
-      state.projects = action.payload;
-    },
-  },
-});
-
-export async function fetchProjects(dispatch, getState) {
+const getProjects = async () => {
   const response = await getDocs(collection(db, "projects"));
-  const projects = response.docs
+  return response.docs
     .map((doc) => {
       const data = doc.data();
       return {
@@ -53,8 +20,11 @@ export async function fetchProjects(dispatch, getState) {
       startDate: convertTime(doc.startDate.toDate()),
       endDate: convertTime(doc.endDate.toDate()),
     }));
+};
 
-  dispatch(projectsSlice.actions.saveProjectsToStore(projects));
-}
-
-export const projectsReducer = projectsSlice.reducer;
+export const useProjects = () => {
+  return useQuery({
+    queryKey: ["projects"],
+    queryFn: getProjects,
+  });
+};
