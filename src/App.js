@@ -46,6 +46,7 @@ function App() {
       h6: { fontFamily: "Roboto" },
       h5: { fontFamily: "Roboto" },
       h4: { fontFamily: "Roboto" },
+      h3: { fontFamily: "Roboto" },
       body2: { fontFamily: "Roboto" },
       body1: { fontFamily: "Roboto" },
       fontFamily: ["Arial"].join(","),
