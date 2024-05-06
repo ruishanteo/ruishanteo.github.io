@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Box, FormControlLabel, FormGroup, Switch } from "@mui/material";
+import {
+  Box,
+  FormControlLabel,
+  FormGroup,
+  Switch,
+  useTheme,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 
@@ -9,6 +15,7 @@ import { Header } from "../components/Header.js";
 import { About } from "./About.js";
 import { Home } from "./Home.js";
 import { Projects } from "./Projects.js";
+import { SparklesCore } from "../utils/Sparkles";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   zIndex: 2,
@@ -60,19 +67,9 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 
 const sectionIds = ["home", "projects", "about"];
 
-function useRefWithCallback() {
-  const ref = useRef(null);
-  const [toggle, setToggle] = useState(false);
-  const refCallback = useCallback((node) => {
-    ref.current = node;
-    setToggle((val) => !val);
-  }, []);
-
-  return [toggle, refCallback, ref];
-}
-
 export function Combined({ isDarkTheme, changeTheme }) {
-  const [toggle, refCallback, parallaxRef] = useRefWithCallback();
+  const theme = useTheme();
+  const parallaxRef = useRef(null);
   const { status: projectStatus, data: projects, error } = useProjects();
 
   useEffect(() => {
@@ -158,11 +155,13 @@ export function Combined({ isDarkTheme, changeTheme }) {
     return <div>Error: {error.message}</div>;
   }
 
+  const numOfSections = projects.length + 3.35;
+
   return (
     <div style={{ width: "100%", height: "fit-content" }}>
-      <Parallax ref={refCallback} pages={projects.length + 3.35}>
+      <Parallax ref={parallaxRef} pages={numOfSections}>
         <ParallaxLayer
-          sticky={{ start: 0, end: projects.length + 3.35 }}
+          sticky={{ start: 0, end: numOfSections }}
           speed={0.1}
           style={{ zIndex: 1, height: "fit-content" }}
         >
@@ -170,7 +169,18 @@ export function Combined({ isDarkTheme, changeTheme }) {
             value={value}
             setValue={setValue}
             scrollToSection={scrollToSection}
-            numOfSections={projects.length + 5}
+            aboutSectionOffset={projects.length + 1.15}
+          />
+        </ParallaxLayer>
+
+        <ParallaxLayer offset={0} factor={numOfSections}>
+          <SparklesCore
+            background="transparent"
+            minSize={0.6}
+            maxSize={1.5}
+            particleDensity={30}
+            className="w-full h-full"
+            particleColor={theme.palette.secondary.main}
           />
         </ParallaxLayer>
 
