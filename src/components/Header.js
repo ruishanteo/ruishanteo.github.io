@@ -9,7 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 
-export function Header({ value, setValue, scrollToSection, numOfSections }) {
+export function Header({
+  value,
+  setValue,
+  scrollToSection,
+  aboutSectionOffset,
+}) {
   return (
     <AppBar
       sx={{
@@ -56,6 +61,13 @@ export function Header({ value, setValue, scrollToSection, numOfSections }) {
               }}
             >
               <Tab
+                value={0}
+                sx={{
+                  minWidth: 0,
+                  padding: 0,
+                }}
+              />
+              <Tab
                 value={1}
                 onClick={() => scrollToSection(1)}
                 label={
@@ -73,7 +85,7 @@ export function Header({ value, setValue, scrollToSection, numOfSections }) {
               />
               <Tab
                 value={2}
-                onClick={() => scrollToSection(numOfSections - 3.95)}
+                onClick={() => scrollToSection(aboutSectionOffset - 0.1)}
                 label={
                   <Typography
                     sx={{
