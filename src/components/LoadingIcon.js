@@ -3,7 +3,6 @@ import React from "react";
 export const LoadingIcon = () => (
   <svg
     version="1.1"
-    id="Layer_1"
     viewBox="0 0 100 100"
     width="100px"
     height="100px"
