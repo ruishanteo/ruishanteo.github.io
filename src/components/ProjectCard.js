@@ -1,24 +1,11 @@
-import * as React from "react";
-
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Grid,
-  Link,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
-
+import { useEffect, useCallback, useState } from "react";
+import { Box, CardMedia, Grid, Link, Tooltip, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { Link as LinkIcon } from "@mui/icons-material";
+import { ParallaxLayer } from "@react-spring/parallax";
+import { AnimatePresence, motion } from "framer-motion";
+
+import { ImagesSlider } from "../utils/ImagesSlider";
 
 const renderTech = (techName, techStack) => {
   let srcUrl = "";
@@ -31,16 +18,64 @@ const renderTech = (techName, techStack) => {
   return (
     <Grid item key={techName}>
       <Tooltip title={techName}>
-        <img src={srcUrl} alt={techName} width={30} />
+        <Box
+          as="img"
+          src={srcUrl}
+          alt={techName}
+          sx={{ width: { xs: 15, md: 30 } }}
+        />
       </Tooltip>
     </Grid>
   );
 };
+// Random percentage between 30 and 90
+const getRandomPercentage = () => {
+  return Math.floor(Math.random() * 60) + 30;
+};
 
-export function ProjectCard({ project, techStack }) {
-  const [open, setOpen] = React.useState(false);
+export function ProjectCard({ project, techStack, offset }) {
+  const [open, setOpen] = useState(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [percentages] = useState([
+    getRandomPercentage(),
+    getRandomPercentage(),
+    getRandomPercentage(),
+    getRandomPercentage(),
+    getRandomPercentage(),
+    getRandomPercentage(),
+    getRandomPercentage(),
+    getRandomPercentage(),
+  ]);
+  const [loadedImages, setLoadedImages] = useState([]);
+  const [isPortrait, setIsPortrait] = useState(false);
+
+  const loadImages = useCallback(() => {
+    let minWidth = 0;
+    let minHeight = 0;
+    const loadPromises = project.fullSizedImg.split(" ").map((image) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = image;
+        img.onload = () => {
+          if (img.width > minWidth) {
+            minWidth = img.width;
+          }
+          if (img.height > minHeight) {
+            minHeight = img.height;
+          }
+          return resolve(image);
+        };
+        img.onerror = reject;
+      });
+    });
+
+    Promise.all(loadPromises)
+      .then((loadedImages) => {
+        setLoadedImages(loadedImages);
+        setIsPortrait(minHeight > minWidth);
+      })
+      .catch((error) => console.error("Failed to load images", error));
+  }, [project]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -50,134 +85,207 @@ export function ProjectCard({ project, techStack }) {
     setOpen(false);
   };
 
+  useEffect(() => {
+    loadImages();
+  }, [loadImages]);
+
+  const percentagesText = `${percentages[0]}% ${percentages[1]}% ${percentages[2]}% ${percentages[3]}% / ${percentages[4]}% ${percentages[5]}% ${percentages[6]}% ${percentages[7]}%`;
+
   return (
-    <Box>
-      <Card
-        onClick={handleClickOpen}
-        sx={{
-          "&:hover": {
-            boxShadow: 10,
+    <ParallaxLayer offset={0.75 + offset} speed={0.3}>
+      <motion.div
+        initial={{ y: 300 }}
+        whileInView={{
+          y: 50,
+          transition: {
+            type: "spring",
+            bounce: 0.5,
+            duration: 0.8,
           },
-          borderRadius: 3,
-          width: { xs: 400, md: "80vh" },
         }}
+        viewport={{ once: true }}
       >
-        <CardMedia
-          component="img"
-          alt="project1"
-          width={500}
-          height={(500 / 4) * 3}
-          image={project.thumbnailImg}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {project.title}
-          </Typography>
-
-          <Box
-            sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "-webkit-box",
-              WebkitLineClamp: "2",
-              WebkitBoxOrient: "vertical",
-              mb: 3,
-            }}
-          >
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              sx={{ wordBreak: "break-word", textTransform: "none" }}
-            >
-              {project.description}
-            </Typography>
-          </Box>
-          <Grid container>
-            {project.techStack.map((tech) => renderTech(tech, techStack))}
-          </Grid>
-        </CardContent>
-      </Card>
-
-      <Dialog
-        fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
-        fullWidth
-      >
-        <DialogTitle
-          sx={{
-            backgroundColor: "secondary.dark",
-            display: "flex",
-            padding: 2,
-            marginBottom: 2,
-            alignItems: "center",
-            justifyContent: "center",
+        <motion.div
+          style={{
+            "&:hover": {
+              boxShadow: 10,
+            },
+            borderRadius: percentagesText,
+            backgroundColor: theme.palette.primary.main,
+            width: { xs: 400, md: "60vw" },
+            height: "fit-content",
+          }}
+          onClick={() => {
+            if (open) {
+              handleClose();
+            } else {
+              handleClickOpen();
+            }
+          }}
+          onHoverStart={handleClickOpen}
+          onHoverEnd={handleClose}
+          whileHover={{
+            borderRadius: "1%",
+            padding: 0,
+            height: "fit-content",
+            transition: { duration: 0.5 },
+          }}
+          transition={{
+            duration: 0.5,
           }}
         >
-          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-            {project.title.toUpperCase()}
-          </Typography>
-        </DialogTitle>
-
-        <DialogContent>
-          <img width="100%" src={project.fullSizedImg} alt="fullSized img" />
-          <DialogContentText variant="h6" sx={{ mt: 3, fontWeight: "bold" }}>
-            Description
-          </DialogContentText>
-
-          <DialogContentText variant="body1">
-            {project.description}
-          </DialogContentText>
-
-          <DialogContentText variant="h6" sx={{ mt: 3, fontWeight: "bold" }}>
-            Start Date:
-          </DialogContentText>
-
-          <DialogContentText variant="body1">
-            {project.startDate}
-          </DialogContentText>
-
-          <DialogContentText variant="h6" sx={{ mt: 3, fontWeight: "bold" }}>
-            End Date:
-          </DialogContentText>
-
-          <DialogContentText variant="body1">
-            {project.endDate}
-          </DialogContentText>
-
-          <DialogContentText variant="h6" sx={{ mt: 3, fontWeight: "bold" }}>
-            Tech Stack
-          </DialogContentText>
-
-          <Grid container flexDirection="row">
-            {project.techStack.map((tech) => renderTech(tech, techStack))}
-          </Grid>
-          <DialogContentText variant="h6" sx={{ mt: 3, fontWeight: "bold" }}>
-            Links
-          </DialogContentText>
-
-          {project.links.map((link) => {
-            return (
-              <Link href={`${link.url}`} key={link.displayText}>
-                <Typography variant="body1" sx={{ color: "primary.dark" }}>
-                  {link.displayText}
+          <AnimatePresence>
+            {!open ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <CardMedia
+                  component="img"
+                  alt={project.title}
+                  sx={{
+                    width: { xs: "150px", md: "300px" },
+                    height: { xs: "150px", md: "300px" },
+                  }}
+                  image={project.thumbnailImg}
+                />
+                <Typography gutterBottom variant="h5" component="div">
+                  {project.title}
                 </Typography>
-              </Link>
-            );
-          })}
-        </DialogContent>
 
-        <DialogActions>
-          <Button
-            autoFocus
-            onClick={handleClose}
-            variant="outlined"
-            color="secondary"
-          >
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+                <Box
+                  sx={{
+                    overflow: "hidden",
+                    width: "70vw",
+                    textOverflow: "ellipsis",
+                    display: "-webkit-box",
+                    WebkitLineClamp: "2",
+                    WebkitBoxOrient: "vertical",
+                    mb: 3,
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    color="text.secondary"
+                    sx={{ wordBreak: "break-word", textTransform: "none" }}
+                  >
+                    {project.description}
+                  </Typography>
+                </Box>
+                <Grid container justifyContent="center">
+                  {project.techStack.map((tech) => renderTech(tech, techStack))}
+                </Grid>
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                style={{
+                  height: "fit-content",
+                  width: "100%",
+                }}
+              >
+                <Grid
+                  container
+                  padding={2}
+                  alignItems="center"
+                  justifyContent="center"
+                  height="fit-content"
+                  width="100%"
+                  gap={2}
+                >
+                  <Grid
+                    item
+                    // width="fit-content"
+                    // height="fit-content"
+                    // maxHeight="100%"
+                    xs={isPortrait ? 4 : 12}
+                    height={{
+                      xs: isPortrait ? "40vh" : "20vh",
+                      md: isPortrait ? "75vh" : "50vh",
+                    }}
+                  >
+                    <ImagesSlider
+                      loadedImages={loadedImages}
+                      isPortrait={isPortrait}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    alignItems="center"
+                    justifyContent="center"
+                    gap={1}
+                    xs={6}
+                  >
+                    <Typography
+                      variant="h3"
+                      color="text.secondary"
+                      fontSize={{ xs: 16, md: 40 }}
+                    >
+                      {project.title}
+                    </Typography>
+                    <Typography variant="h6" fontSize={{ xs: 12, md: 18 }}>
+                      {project.description}
+                    </Typography>
+                    <Typography
+                      color="text.secondary"
+                      fontSize={{ xs: 10, md: 15 }}
+                    >
+                      {project.startDate} - {project.endDate}
+                    </Typography>
+                    <Grid
+                      item
+                      container
+                      alignItems="center"
+                      justifyContent="center"
+                      gap={0.5}
+                    >
+                      {project.techStack.map((tech) =>
+                        renderTech(tech, techStack)
+                      )}
+                    </Grid>
+                    <Grid
+                      item
+                      container
+                      flexDirection="row"
+                      width="500%"
+                      gap={1}
+                      justifyContent="center"
+                    >
+                      {project.links.map((link) => {
+                        return (
+                          <Link
+                            href={`${link.url}`}
+                            key={link.displayText}
+                            sx={{
+                              textDecoration: "none",
+                            }}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <Typography
+                              sx={{
+                                color: "primary.dark",
+                              }}
+                              fontSize={{ xs: 10, md: 15 }}
+                              variant="body2"
+                            >
+                              <LinkIcon fontSize="0.5rem" /> {link.displayText}
+                            </Typography>
+                          </Link>
+                        );
+                      })}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </motion.div>
+    </ParallaxLayer>
   );
 }
