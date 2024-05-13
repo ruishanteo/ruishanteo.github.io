@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Grid,
+  Link,
   Tooltip,
   Typography,
   useTheme,
@@ -95,24 +96,31 @@ export function About() {
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button
-                    onClick={(e) => {
-                      window.location.href = "https://github.com/ruishanteo";
+                  <Link
+                    href={"https://github.com/ruishanteo"}
+                    sx={{
+                      textDecoration: "none",
                     }}
-                    sx={{ color: "primary.dark", textTransform: "none" }}
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
-                    <GitHub />
-                    <Typography
-                      sx={{
-                        display: "flex",
-                        fontFamily: "Roboto",
-                        ml: 2,
-                      }}
-                      variant="h6"
+                    <Button
+                      sx={{ color: "primary.dark", textTransform: "none" }}
                     >
-                      Github
-                    </Typography>
-                  </Button>
+                      <GitHub />
+                      <Typography
+                        sx={{
+                          display: "flex",
+                          fontFamily: "Roboto",
+                          ml: 2,
+                          color: "primary.dark",
+                        }}
+                        variant="h6"
+                      >
+                        Github
+                      </Typography>
+                    </Button>
+                  </Link>
                 </Grid>
               </Grid>
             </Box>
