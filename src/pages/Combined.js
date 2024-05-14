@@ -12,6 +12,7 @@ import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 import { useProjects } from "../backend/projectsStore.js";
 
 import { Header } from "../components/Header.js";
+import { LoadingIcon } from "../components/LoadingIcon";
 import { About } from "./About.js";
 import { Home } from "./Home.js";
 import { Projects } from "./Projects.js";
@@ -144,11 +145,15 @@ export function Combined({ isDarkTheme, changeTheme }) {
       parallaxRef.current.scrollTo(value);
       setTimeout(addScrollListener, 650);
     },
-    [parallaxRef]
+    [parallaxRef, addScrollListener, removeScrollListener]
   );
 
   if (projectStatus === "pending") {
-    return <div>Loading...</div>;
+    return (
+      <Box position="absolute" top="50%" left="50%">
+        <LoadingIcon />
+      </Box>
+    );
   }
 
   if (error) {
