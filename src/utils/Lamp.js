@@ -7,14 +7,14 @@ export function Lamp({ background, light }) {
   return (
     <LampContainer background={background} light={light}>
       <motion.h3
-        initial={{ opacity: 0.5, y: 200 }}
-        whileInView={{ opacity: 1, y: 100 }}
+        initial={{ opacity: 0.5, y: 150 }}
+        whileInView={{ opacity: 1, y: 0 }}
         transition={{
           delay: 0.3,
           duration: 0.8,
           ease: "easeInOut",
         }}
-        className="mt-3 bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-4xl font-small tracking-tight text-transparent md:text-5xl"
+        className="mt-3 bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-4xl font-small tracking-tight md:text-5xl"
       >
         about me
       </motion.h3>
@@ -31,6 +31,17 @@ export const LampContainer = ({ children, className, background, light }) => {
       )}
       style={{ minHeight: "65vh" }}
     >
+      <motion.div
+        initial={{ width: "15rem" }}
+        whileInView={{ width: "35rem" }}
+        transition={{
+          delay: 0.3,
+          duration: 0.8,
+          ease: "easeInOut",
+        }}
+        className="inset-auto z-50 h-0.5 w-[35rem]"
+        style={{ backgroundColor: light }}
+      ></motion.div>
       <div className="relative flex w-full flex-1 scale-y-125 items-center justify-center isolate z-0 ">
         <motion.div
           initial={{ opacity: 0.5, width: "15rem" }}
@@ -85,17 +96,6 @@ export const LampContainer = ({ children, className, background, light }) => {
             ease: "easeInOut",
           }}
           className="absolute inset-auto z-30 h-36 w-64 -translate-y-[6rem] rounded-full  blur-2xl"
-          style={{ backgroundColor: light }}
-        ></motion.div>
-        <motion.div
-          initial={{ width: "15rem" }}
-          whileInView={{ width: "30rem" }}
-          transition={{
-            delay: 0.3,
-            duration: 0.8,
-            ease: "easeInOut",
-          }}
-          className="absolute inset-auto z-50 h-0.5 w-[30rem] -translate-y-[7rem] "
           style={{ backgroundColor: light }}
         ></motion.div>
 
