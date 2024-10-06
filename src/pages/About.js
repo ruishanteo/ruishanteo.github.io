@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import {
   Box,
   Button,
@@ -28,16 +29,52 @@ import { LoadingIcon } from "../components/LoadingIcon";
 import { ExperienceCard } from "../components/ExperienceCard";
 import { Lamp } from "../utils/Lamp";
 
-export function About() {
+export function About({ setExtraPages }) {
   const theme = useTheme();
+  const contentRef = useRef(null);
+
   const { status: experienceStatus, data: experiences } = useExperiences();
   const { status: techStackStatus, data: techStack } = useTechStack();
+
+  useEffect(() => {
+    let timeoutId;
+
+    const updatePages = () => {
+      if (
+        contentRef.current &&
+        experienceStatus !== "pending" &&
+        techStackStatus !== "pending"
+      ) {
+        const contentHeight = contentRef.current.offsetHeight;
+        const viewportHeight = window.innerHeight;
+        const extraPages =
+          Math.ceil((10 * contentHeight) / viewportHeight) / 10;
+
+        if (extraPages !== 0) {
+          setExtraPages(extraPages);
+        }
+      }
+    };
+
+    const debouncedUpdatePages = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(updatePages, 300);
+    };
+
+    debouncedUpdatePages();
+    window.addEventListener("resize", debouncedUpdatePages);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", debouncedUpdatePages);
+    };
+  }, [experienceStatus, setExtraPages, techStackStatus]);
 
   const loading =
     experienceStatus === "pending" || techStackStatus === "pending";
 
   return (
-    <Box mt={3} mb={5} align="center">
+    <Box mt={3} mb={5} align="center" ref={contentRef}>
       {theme.palette.mode === "dark" ? (
         <Lamp
           background={theme.palette.background}

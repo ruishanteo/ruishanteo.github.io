@@ -92,7 +92,7 @@ export function ProjectCard({ project, techStack, offset }) {
   const percentagesText = `${percentages[0]}% ${percentages[1]}% ${percentages[2]}% ${percentages[3]}% / ${percentages[4]}% ${percentages[5]}% ${percentages[6]}% ${percentages[7]}%`;
 
   return (
-    <ParallaxLayer offset={0.75 + offset} speed={0.3}>
+    <ParallaxLayer offset={0.5 + offset} speed={0.15}>
       <motion.div
         initial={{ y: 300 }}
         whileInView={{

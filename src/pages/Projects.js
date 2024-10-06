@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { ParallaxLayer } from "@react-spring/parallax";
 
 import { useProjects } from "../backend/projectsStore";
 import { useTechStack } from "../backend/techStackStore";
@@ -16,9 +17,11 @@ export function Projects() {
 
   return (
     <Box mt={3} mb={5} align="center">
-      <Typography sx={{ mb: 3 }} variant="h4">
-        projects i have worked on
-      </Typography>
+      <ParallaxLayer offset={0.1} speed={0.1} id="projects">
+        <Typography sx={{ mb: 3 }} variant="h4">
+          projects i have worked on
+        </Typography>
+      </ParallaxLayer>
 
       {loading ? (
         <LoadingIcon />

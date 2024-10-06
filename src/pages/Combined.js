@@ -9,7 +9,9 @@ import {
 import { styled } from "@mui/material/styles";
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 
+import { useExperiences } from "../backend/experiencesStore";
 import { useProjects } from "../backend/projectsStore.js";
+import { useTechStack } from "../backend/techStackStore";
 
 import { Header } from "../components/Header.js";
 import { LoadingIcon } from "../components/LoadingIcon";
@@ -70,24 +72,39 @@ const sectionIds = ["home", "projects", "about"];
 
 export function Combined({ isDarkTheme, changeTheme }) {
   const theme = useTheme();
+  return (
+    <div style={{ width: "100%", height: "fit-content" }}>
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          zIndex: 0,
+        }}
+      >
+        <SparklesCore
+          background="transparent"
+          minSize={0.6}
+          maxSize={1.5}
+          particleDensity={30}
+          className="w-full h-full"
+          particleColor={theme.palette.secondary.main}
+        />
+      </Box>
+      <CombinedSections isDarkTheme={isDarkTheme} changeTheme={changeTheme} />
+    </div>
+  );
+}
+
+function CombinedSections({ isDarkTheme, changeTheme }) {
   const parallaxRef = useRef(null);
   const { status: projectStatus, data: projects, error } = useProjects();
+  const { status: experienceStatus } = useExperiences();
+  const { status: techStackStatus } = useTechStack();
 
-  useEffect(() => {
-    const setMinHeightToWindowHeight = () => {
-      const pages = document.querySelectorAll(".page");
-      const windowHeight = window.innerHeight;
-      pages.forEach((page) => {
-        page.style.minHeight = `${windowHeight}px`;
-      });
-    };
-    setMinHeightToWindowHeight();
-
-    window.addEventListener("resize", setMinHeightToWindowHeight);
-
-    return () =>
-      window.removeEventListener("resize", setMinHeightToWindowHeight);
-  }, []);
+  const [extraPages, setExtraPages] = useState(0);
 
   const [value, setValue] = useState(0);
   const SECTION_OFFSET = -250;
@@ -148,9 +165,19 @@ export function Combined({ isDarkTheme, changeTheme }) {
     [parallaxRef, addScrollListener, removeScrollListener]
   );
 
-  if (projectStatus === "pending") {
+  if (
+    projectStatus === "pending" ||
+    experienceStatus === "pending" ||
+    techStackStatus === "pending"
+  ) {
     return (
-      <Box position="absolute" top="50%" left="50%">
+      <Box
+        width="100vw"
+        height="100vh"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
         <LoadingIcon />
       </Box>
     );
@@ -160,11 +187,12 @@ export function Combined({ isDarkTheme, changeTheme }) {
     return <div>Error: {error.message}</div>;
   }
 
-  const numOfSections = projects.length + 3.35;
+  const numOfSections =
+    Math.ceil(10 * (projects.length + 1.15 + extraPages)) / 10;
 
   return (
-    <div style={{ width: "100%", height: "fit-content" }}>
-      <Parallax ref={parallaxRef} pages={numOfSections}>
+    <>
+      <Parallax ref={parallaxRef} pages={numOfSections} key={numOfSections}>
         <ParallaxLayer
           sticky={{ start: 0, end: numOfSections }}
           speed={0.1}
@@ -175,17 +203,6 @@ export function Combined({ isDarkTheme, changeTheme }) {
             setValue={setValue}
             scrollToSection={scrollToSection}
             aboutSectionOffset={projects.length + 1.15}
-          />
-        </ParallaxLayer>
-
-        <ParallaxLayer offset={0} factor={numOfSections}>
-          <SparklesCore
-            background="transparent"
-            minSize={0.6}
-            maxSize={1.5}
-            particleDensity={30}
-            className="w-full h-full"
-            particleColor={theme.palette.secondary.main}
           />
         </ParallaxLayer>
 
@@ -205,14 +222,14 @@ export function Combined({ isDarkTheme, changeTheme }) {
           <Home />
         </ParallaxLayer>
 
-        <ParallaxLayer offset={1.2} speed={0.1} id="projects">
+        <ParallaxLayer offset={1} speed={0.1} id="projects">
           <Projects />
         </ParallaxLayer>
 
-        <ParallaxLayer offset={projects.length + 1.15} speed={0.5} id="about">
-          <About />
+        <ParallaxLayer offset={projects.length + 1.15} speed={0.1} id="about">
+          <About setExtraPages={(pages) => setExtraPages(pages)} />
         </ParallaxLayer>
       </Parallax>
-    </div>
+    </>
   );
 }
