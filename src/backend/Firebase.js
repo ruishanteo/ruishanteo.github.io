@@ -19,8 +19,7 @@ function convertTime(date) {
   ];
   const month = months[date.getMonth()];
   const year = date.getFullYear();
-  const day = date.getDate();
-  return `${day} ${month} ${year}`;
+  return `${month} ${year}`;
 }
 
 const firebaseConfig = {
